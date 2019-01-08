@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Post
 {
@@ -25,6 +26,11 @@ class Post
      * @ORM\Column(type="string", length=1500)
      */
     private $description;
+
+    /**
+     * @ORM\Column(name="body", type="text")
+     */
+    private $body;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\author")
@@ -71,6 +77,18 @@ class Post
         return $this;
     }
 
+    public function setBody($body)
+    {
+        $this->body = $body;
+
+        return $this;
+    }
+
+    public function getBody()
+    {
+        return $this->body;
+    }
+
     public function getAuthor(): ?author
     {
         return $this->author;
@@ -105,5 +123,27 @@ class Post
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        if (!$this->getCreatedAt()) {
+            $this->setCreatedAt(new \DateTime());
+        }
+
+        if (!$this->getUpdatedAt()) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime());
     }
 }
