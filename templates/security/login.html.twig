@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <style>
+        .error{color: red}
+    </style>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <a href="{{ path('logout') }}">Logout</a>
+                <h1>Login!</h1>
+                {% if error %}
+                    <span class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                {% endif %}
+                <form action="{{ path('login') }}" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="_username" value="{{ lastUserName }}" />
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="_password" />
+                    {#
+                        If you want to control the URL the user
+                        is redirected to on success (more details below)
+                        <input type="hidden" name="_target_path" value="/account" />
+                    #}
+                    <button type="submit">login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
