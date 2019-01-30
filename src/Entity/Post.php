@@ -33,10 +33,10 @@ class Post
     private $body;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\author")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $author;
+    private $user;
 
     /**
      * @ORM\Column(type="datetime")
@@ -89,17 +89,23 @@ class Post
         return $this->body;
     }
 
-    public function getAuthor(): ?author
+    /**
+     * @return mixed
+     */
+    public function getUser()
     {
-        return $this->author;
+        return $this->user;
     }
 
-    public function setAuthor(?author $author): self
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user): void
     {
-        $this->author = $author;
-
-        return $this;
+        $this->user = $user;
     }
+
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
