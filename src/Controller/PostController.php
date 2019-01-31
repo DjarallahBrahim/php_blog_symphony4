@@ -65,8 +65,8 @@ class PostController extends AbstractController
             ->find($id);
 
         if ($post) {
-            dump($post);//todo to delete
-            return new Response('post details');
+            return $this->render('post_details.html.twig', array(
+                'post' => $post));
         } else {
             return new Response('no such post');//TODO return error
         }
@@ -81,8 +81,9 @@ class PostController extends AbstractController
         $posts = $this->getDoctrine()
             ->getRepository(Post::class)
             ->findAll();
-        dump($posts);
-        return new Response('posts details');
+
+        return $this->render('view_posts.html.twig', array(
+            'posts' => $posts));
 
     }
 

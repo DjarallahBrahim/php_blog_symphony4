@@ -1,3 +1,40 @@
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .form-and-title{
+            margin-top: 10%;
+            width: 50%;
+            margin-left: 25%;
+            margin-bottom: 5%;
+        }
+        .form-and-title h2 {
+            text-align: center;
+        }
+
+    </style>
+ {% endblock %}
+
+{% block body %}
+    <div class="form-and-title">
+        <h2>Create a new Article</h2>
+        {{ form_start(form) }}
+            <div class="form-group">
+                <label>Title</label>
+                {{ form_widget(form.title) }}
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                {{ form_widget(form.description) }}
+            </div>
+
+            <div class="form-group">
+                <label>Body</label>
+                {{ form_widget(form.body) }}
+            </div>
+            {{ form_widget(form.submit) }}
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
