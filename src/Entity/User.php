@@ -32,6 +32,20 @@ class User implements UserInterface, \Serializable
      */
     private $email;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="short_bio", type="string", length=500)
+     */
+    private $shortBio = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     */
+    private $phone = '';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -72,6 +86,40 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getShortBio(): string
+    {
+        return $this->shortBio;
+    }
+
+    /**
+     * @param string $shortBio
+     */
+    public function setShortBio(string $shortBio): void
+    {
+        $this->shortBio = $shortBio;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+
 
     /**
      * Returns the roles granted to the user.

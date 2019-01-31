@@ -32,6 +32,8 @@ class Fixtures extends Fixture
         $user->setPassword(
             $this->encoder->encodePassword($user,"admin")
         );
+        $user->setPhone('0645856987');
+        $user->setShortBio("bla bla bla bla bla bla");
 
         $manager->persist($user);
 
@@ -41,6 +43,8 @@ class Fixtures extends Fixture
         $user2->setPassword(
             $this->encoder->encodePassword($user2,"admin2")
         );
+        $user2->setPhone('0645856987');
+        $user2->setShortBio(date('bla bla bla bla bla bla'));
 
         $manager->persist($user2);
 
