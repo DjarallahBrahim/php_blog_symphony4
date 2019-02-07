@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
@@ -18,17 +20,26 @@ class Post
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length( max = 100,
+     *     min = 20)
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=1500)
+     * @Assert\NotBlank()
+     * * @Assert\Length(
+     *     max = 1500,
+     *     min = 100
+     * )
      */
     private $description;
 
     /**
      * @ORM\Column(name="body", type="text")
+     * @Assert\NotBlank()
      */
     private $body;
 

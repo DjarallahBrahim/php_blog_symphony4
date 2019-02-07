@@ -20,6 +20,16 @@
     <div class="form-and-title">
         <h2>Create a new Article</h2>
         {{ form_start(form) }}
+        {% if errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {% for error in errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
             <div class="form-group">
                 <label>Title</label>
                 {{ form_widget(form.title) }}

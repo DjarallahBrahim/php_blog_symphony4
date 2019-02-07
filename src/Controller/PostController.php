@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class PostController extends AbstractController
@@ -29,8 +30,12 @@ class PostController extends AbstractController
 
     /**
      * @Route("/post/create", name="createPost")
+     * @param Request $request
+     * @param AuthenticationUtils $authenticationUtils
+     * @param ValidatorInterface $validator
+     * @return Response
      */
-    public function createPostAction(Request $request, AuthenticationUtils $authenticationUtils)
+    public function createPostAction(Request $request, AuthenticationUtils $authenticationUtils, ValidatorInterface $validator)
     {
         $post = new Post();
 
@@ -40,6 +45,16 @@ class PostController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            //validate the data user entered
+            $errors = $validator->validate($post);
+
+            if ( count($errors) > 0 ){
+                dump($errors);
+                return $this->render('post/form.html.twig', [
+                    'form' => $form->createView(),
+                    'errors' => $errors
+                ]);
+            }
             $post->setUser($this->security->getUser());
 
             $em = $this->getDoctrine()->getManager();
@@ -48,10 +63,15 @@ class PostController extends AbstractController
 
             //TODO redirect to detail page
             dump($form->getData());//todo to delete
-            return new Response('post created successfully');
+
+            return $this->redirectToRoute('viewPost',["id" => $post->getId()]);
+
         }
-        return $this->render('post/form.html.twig', array(
-            'form' => $form->createView()));
+
+        return $this->render('post/form.html.twig', [
+            'form' => $form->createView(),
+            'errors' => null
+        ]);
     }
 
     /**

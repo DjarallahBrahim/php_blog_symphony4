@@ -3,10 +3,17 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(
+ *     fields={"username"},
+ *     errorPath="username",
+ *     message="This user name is already used"
+ * )
  */
 class User implements UserInterface, \Serializable
 {
@@ -19,23 +26,32 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Email
+     *
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="short_bio", type="string", length=500)
+     * @ORM\Column(name="short_bio", type="string", length=1000)
+     * @Assert\Length(
+     *     max = 1000,
+     *     min = 50
+     * )
      */
     private $shortBio = '';
 
@@ -43,6 +59,7 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     * @Assert\Regex(pattern="/^[0-9]10$/", message="the phone number is not valid, it must consist of 10 digits")
      */
     private $phone = '';
 
