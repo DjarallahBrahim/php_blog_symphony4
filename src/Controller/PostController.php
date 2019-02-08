@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Form\PostType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
-class PostController extends AbstractController
+class PostController extends Controller
 {
 
     private $security;
@@ -55,16 +55,16 @@ class PostController extends AbstractController
                     'errors' => $errors
                 ]);
             }
+
+            //associate the post to the connected user
             $post->setUser($this->security->getUser());
 
+            //persist the user
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
 
-            //TODO redirect to detail page
-            dump($form->getData());//todo to delete
-
-            return $this->redirectToRoute('viewPost',["id" => $post->getId()]);
+            return $this->redirectToRoute('viewPost',['id' => $post->getId()]);
 
         }
 
@@ -94,13 +94,19 @@ class PostController extends AbstractController
 
     /**
      * @Route("/posts",name="viewPosts")
+     * @param Request $request
+     * @return Response
      */
-    public function viewPostsAction()
+    public function viewPostsAction(Request $request)
     {
 
-        $posts = $this->getDoctrine()
+        $allPostsQuery = $this->getDoctrine()
             ->getRepository(Post::class)
             ->findAll();
+
+        $paginator  = $this->get('knp_paginator');
+
+        $posts = $paginator->paginate($allPostsQuery, $request->query->getInt('page', 1),3);
 
         return $this->render('view_posts.html.twig', array(
             'posts' => $posts));
