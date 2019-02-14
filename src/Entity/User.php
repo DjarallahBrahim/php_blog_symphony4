@@ -33,6 +33,10 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/",
+     *      message="Password must contain minimum eight characters, at least one letter and one number"
+     * )
      */
     private $password;
 
@@ -50,7 +54,9 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="short_bio", type="string", length=1000)
      * @Assert\Length(
      *     max = 1000,
-     *     min = 50
+     *     min = 50,
+     *     minMessage="Short Bio value is too short. It should have 50 characters or more.",
+     *     maxMessage="Short Bio value is too long. It should have 1000 characters or less."
      * )
      */
     private $shortBio = '';
@@ -59,9 +65,10 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
-     * @Assert\Regex(pattern="/^[0-9]10$/", message="the phone number is not valid, it must consist of 10 digits")
+     * @Assert\Regex(pattern="/^[0-9]{10}/", message="the phone number is not valid, it must consist of 10 digits")
      */
     private $phone = '';
+
 
     public function getId(): ?int
     {
@@ -73,7 +80,7 @@ class User implements UserInterface, \Serializable
         return $this->username;
     }
 
-    public function setUsername(string $username): self
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
 
@@ -97,7 +104,7 @@ class User implements UserInterface, \Serializable
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 

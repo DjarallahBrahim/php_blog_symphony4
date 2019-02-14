@@ -22,7 +22,7 @@ security:
 
             logout:
                 path: /logout
-                target: /
+                target: /posts
 
             # activate different ways to authenticate
 
@@ -40,3 +40,4 @@ security:
          - { path: ^/post/create, roles: ROLE_USER}
          - { path: ^/post/update/*, roles: ROLE_USER}
          - { path: ^/post/delete/*, roles: ROLE_USER}
+         - { path: ^/user/update/*, roles: ROLE_USER}

@@ -49,7 +49,6 @@ class PostController extends Controller
             $errors = $validator->validate($post);
 
             if ( count($errors) > 0 ){
-                dump($errors);
                 return $this->render('post/form.html.twig', [
                     'form' => $form->createView(),
                     'errors' => $errors
@@ -119,13 +118,12 @@ class PostController extends Controller
      * @return Response
      * @Route("/post/update/{id}",name="updatePost")
      */
-    public function updatePostAction(Request $request, $id)
+    public function updatePostAction(Request $request, $id,ValidatorInterface $validator)
     {
 
         $em = $this->getDoctrine()->getManager();
 
         $post = $em->getRepository(Post::class)->find($id);
-        dump($post);
 
         if (!$post) {
             return new Response('no such post');
@@ -140,6 +138,16 @@ class PostController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+
+            $errors = $validator->validate($post);
+
+            if ( count($errors) > 0 ){
+                return $this->render('post/form.html.twig', [
+                    'form' => $form->createView(),
+                    'errors' => $errors
+                ]);
+            }
+
             $post = $form->getData();
             dump($post);//todo to delete
             $em->flush();
@@ -147,7 +155,9 @@ class PostController extends Controller
         }
 
         return $this->render('post/form.html.twig', array(
-            'form' => $form->createView()));
+            'form' => $form->createView(),
+            'errors' => null
+        ));
     }
 
     /**
