@@ -94,7 +94,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/update",name="UserUpdate")
      */
-    public function updateUserAction(Request $request, ValidatorInterface $validator )
+    public function updateUserAction(Request $request, ValidatorInterface $validator ,UserPasswordEncoderInterface $encoder)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -102,6 +102,7 @@ class UserController extends AbstractController
         $user = $em->getRepository(User::class)
             ->find($this->security->getUser()->getId());
 
+        $passwrd = $user->getPassword();
 
         $form = $this->createForm(UserDataType::class,$user);
 
@@ -109,7 +110,12 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted()) {
 
+            //password :: just to pass the validation because  I didn't add it in that form it has his own form
+            $user->setPassword('admin1234');
+
             $errors = $validator->validate($user);
+
+            $user->setPassword($passwrd);
 
             if ( count($errors) > 0 ){
                 return $this->render('user_update.html.twig', [
@@ -121,7 +127,7 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('viewPosts');
+            return $this->redirectToRoute('userProfile');
 
         }
 

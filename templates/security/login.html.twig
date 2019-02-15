@@ -267,7 +267,9 @@
             margin-top: 2%;
         }
 
-
+        h4{
+            padding-top: 4px ;
+        }
     </style>
 {% endblock %}
 
@@ -280,11 +282,12 @@
             <span class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
         {% endif %}
         <div id="formContent">
+                <h4>Login</h4>
                 <div class="fadeIn first">
                     <img src="https://img.icons8.com/cotton/26/000000/gender-neutral-user.png" id="icon" alt="User Icon">
                 </div>
                 <form action="{{ path('login') }}" method="post">
-                    <input type="text" class="fadeIn second" id="username" name="_username" placeholder="login" />
+                    <input type="text" class="fadeIn second" id="username" name="_username" placeholder="username" />
                     <input type="password" class="fadeIn third" id="password" name="_password" placeholder="password" />
                     <input type="submit" class="fadeIn fourth" value="Log In"/>
                 </form>

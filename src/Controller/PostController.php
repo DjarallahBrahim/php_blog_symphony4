@@ -150,7 +150,7 @@ class PostController extends AbstractController
             }
 
             $post = $form->getData();
-            dump($post);//todo to delete
+
             $em->flush();
 
             return $this->redirectToRoute('viewPost',['id' => $post->getId()]);
