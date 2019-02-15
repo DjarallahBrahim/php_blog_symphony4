@@ -32,7 +32,9 @@ class Post
      * @Assert\NotBlank()
      * * @Assert\Length(
      *     max = 1500,
-     *     min = 100
+     *     min = 100,
+     *     minMessage="Short Bio value is too short. It should have 100 characters or more.",
+     *     maxMessage="Short Bio value is too long. It should have 1500 characters or less."
      * )
      */
     private $description;

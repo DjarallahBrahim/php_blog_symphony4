@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Form\PostType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 
-class PostController extends Controller
+class PostController extends AbstractController
 {
 
     private $security;
@@ -97,14 +98,12 @@ class PostController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function viewPostsAction(Request $request)
+    public function viewPostsAction(Request $request, PaginatorInterface $paginator)
     {
 
         $allPostsQuery = $this->getDoctrine()
             ->getRepository(Post::class)
             ->findAll();
-
-        $paginator  = $this->get('knp_paginator');
 
         $posts = $paginator->paginate($allPostsQuery, $request->query->getInt('page', 1),3);
 
