@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .card-all{
+            margin-top: 8%;
+        }
+        .card{
+            margin-top: 4%;
+            width: 60%;
+            margin-left: 5%;
+            margin-bottom: 5%;
+
+        }
+        .pagination{
+
+        }
+        .sideBar{
+            height: 100%;
+            width: 25%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            background-color: rgba(224, 224, 209);
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+        .sideBarContent{
+            margin-top: 15%;
+            margin-left: 5%;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="card-all">
+        {% if posts %}
+            {% for post in posts %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ post.title }}</h2>
+                        <p class="card-text">{{ post.description }}</p>
+                        <a href="{{ path('viewPost',{'id': post.id}) }}" class="btn btn-primary">Read More &rarr;</a>
+                        <a href="{{ path('updatePost',{'id': post.id}) }}" class="btn btn-primary">Edit</a>
+                        <a href="{{ path('deletePost',{'id': post.id}) }}" class="btn btn-danger">Delete</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted on {{ post.createdAt|date('M d ,Y') }} by
+                        <a href="#">{{ post.user.username }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>no articles to display</p>
+        {% endif %}
+        <div class="pagination">
+            {{ knp_pagination_render(posts) }}
+        </div>
+    </div>
+    <div class="sideBar">
+        <div class="sideBarContent">
+            <label>Username :</label>
+            <h4>{{ user.username }}</h4>
+            <label>Email :</label>
+            <h5>{{ user.email }}</h5>
+            <label>Bio :</label>
+            <p>{{ user.shortBio }}</p>
+            <a href="{{ path('UserUpdate') }}" class="btn btn-info"> edit profile</a>
+            <a href="{{ path('UserUpdatePassword') }}" class="btn btn-info"> change password</a>
+        </div>
+    </div>
+{% endblock %}

@@ -41,3 +41,4 @@ security:
          - { path: ^/post/update/*, roles: ROLE_USER}
          - { path: ^/post/delete/*, roles: ROLE_USER}
          - { path: ^/user/update/*, roles: ROLE_USER}
+         - { path: ^/user/profile, roles: ROLE_USER}

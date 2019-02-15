@@ -53,10 +53,10 @@ class User implements UserInterface, \Serializable
      *
      * @ORM\Column(name="short_bio", type="string", length=1000)
      * @Assert\Length(
-     *     max = 1000,
+     *     max = 500,
      *     min = 50,
      *     minMessage="Short Bio value is too short. It should have 50 characters or more.",
-     *     maxMessage="Short Bio value is too long. It should have 1000 characters or less."
+     *     maxMessage="Short Bio value is too long. It should have 500 characters or less."
      * )
      */
     private $shortBio = '';

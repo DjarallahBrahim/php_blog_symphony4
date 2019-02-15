@@ -10,6 +10,7 @@ namespace App\Controller;
 
 
 use App\Entity\User;
+use App\Entity\Post;
 use App\Form\UserDataType;
 use App\Form\UserPasswordUpdateType;
 use App\Form\UserType;
@@ -19,6 +20,8 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 
 
@@ -91,7 +94,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/update",name="UserUpdate")
      */
-    public function updateUser(Request $request, ValidatorInterface $validator )
+    public function updateUserAction(Request $request, ValidatorInterface $validator )
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -132,7 +135,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/update/password",name="UserUpdatePassword")
      */
-    public function updateUserPassword(Request $request, ValidatorInterface $validator, UserPasswordEncoderInterface $encoder )
+    public function updateUserPasswordAction(Request $request, ValidatorInterface $validator, UserPasswordEncoderInterface $encoder )
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -175,6 +178,25 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/user/profile", name="userProfile")
+     */
+    function userProfileAction(Request $request, PaginatorInterface $paginator){
+        $em = $this->getDoctrine()->getManager();
 
+        $user = $em->getRepository(User::class)
+            ->find($this->security->getUser()->getId());
+
+        $userPosts = $em->getRepository(Post::class)
+                    ->findByUser($user->getId());
+
+        $posts = $paginator->paginate($userPosts, $request->query->getInt('page', 1),3);
+
+
+        return $this->render('user_profil.html.twig',[
+            'posts' => $posts,
+            'user' => $user
+        ]);
+    }
 
 }

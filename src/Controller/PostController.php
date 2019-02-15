@@ -13,6 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
+
 class PostController extends Controller
 {
 
@@ -129,6 +130,7 @@ class PostController extends Controller
             return new Response('no such post');
         }//Todo return error
 
+
         if ($post->getUser()->getId() !== $this->security->getUser()->getId()) {
             return new Response('you are not authorized to edit this post');//TODO expetion not authorized
         }
@@ -151,7 +153,9 @@ class PostController extends Controller
             $post = $form->getData();
             dump($post);//todo to delete
             $em->flush();
-            return new Response('post updated');
+
+            return $this->redirectToRoute('viewPost',['id' => $post->getId()]);
+
         }
 
         return $this->render('post/form.html.twig', array(
@@ -180,7 +184,6 @@ class PostController extends Controller
         $em->remove($post);
         $em->flush();
 
-        return new Response('post removed');
-
+        return $this->redirectToRoute('userProfile');
     }
 }
