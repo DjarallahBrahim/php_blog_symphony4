@@ -9,6 +9,8 @@
 namespace App\Tests\controller;
 
 
+use App\Entity\User;
+
 class SecurityControllerTest extends AbstractSetupClass
 {
     /** @test */
@@ -22,5 +24,22 @@ class SecurityControllerTest extends AbstractSetupClass
         $this->assertSame('Login', $title);
     }
 
-
+//    public function testLoginPost()
+//    {
+//        $crawler = $this->client->request('GET', '/login');
+//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+//
+//        $user = $this->createFakeUser('user1');
+//
+//        $form = $crawler->selectButton('Log In')->form();
+//
+//        $crawler = $this->client
+//            ->submit($form,
+//                array('_username' => $user->getUsername(),
+//                    '_password' => $user->getPassword()));
+//
+//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+//
+//
+//    }
 }
