@@ -9,7 +9,9 @@ fonctionalite:
   - authentification
   
 Configuration de la base de données:
-- Configurer la connexion à la BDD (dans le fichier .env) "DATABASE_URL=mysql://DBUsername:DBPassword@DBUrl:3306/DBName"
+- Configurer la BDD (dans le fichier .env) `DATABASE_URL=mysql://DBUsername:DBPassword@DBUrl:3306/DBName`
+- Configurer la BDD de Test (dans le fichier phpunit.xml.dis) 
+`<env name="DATABASE_URL" value="mysql://DBUsername:DBPassword@DBUrl:3306/DBNameTEST" />`
 - pour charger les données executer : 
     `php bin/console doctrine:fixtures:load`
 

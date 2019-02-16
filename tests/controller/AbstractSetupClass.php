@@ -12,15 +12,23 @@ namespace App\Tests\controller;
 use App\Entity\Post;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\StringInput;
+
 
 class AbstractSetupClass extends WebTestCase
 {
+    protected static $application;
 
     protected $client = null;
     protected $em = null;
 
     protected function setUp()
     {
+        self::runCommand('doctrine:database:drop --force');
+        self::runCommand('doctrine:database:create');
+        self::runCommand('doctrine:schema:create');
+
         $this->client = static::createClient();
         $this->em = $this->client->getContainer()
             ->get('doctrine')
@@ -69,5 +77,34 @@ class AbstractSetupClass extends WebTestCase
     {
         $this->em->remove($post);
         $this->em->flush();
+    }
+
+    protected static function runCommand($command)
+    {
+        $command = sprintf('%s --quiet', $command);
+
+        return self::getApplication()->run(new StringInput($command));
+    }
+
+    protected static function getApplication()
+    {
+        if (null === self::$application) {
+            $client = static::createClient();
+
+            self::$application = new Application($client->getKernel());
+            self::$application->setAutoExit(false);
+        }
+
+        return self::$application;
+    }
+
+    protected function tearDown()
+    {
+        self::runCommand('doctrine:database:drop --force');
+
+        parent::tearDown();
+
+        $this->em->close();
+        $this->em = null; // avoid memory leaks
     }
 }
